@@ -62,10 +62,16 @@ def get_frequencies(corpus:str):
 
 #Formats and prints the generated drat coding
 def print_draft(lst: list):
-    print(f"{'Draft':8} Frequency")
+    #Header
+    print(f"{'Shaft':8} {'Draft':8} Frequency")
 
-    for key, val in lst[1].items():
-        print(f"{key:9}{round(val,5)}")
+    #Draft
+    for j in range(len(lst[1])):
+        shaft = str(lst[1][j]["shaft"])
+        draft = lst[1][j]["chars"]
+        freq = lst[1][j]["freq"]
+        
+        print(f"{shaft:9}{draft:9}{round(freq,5)}")
 
 def main(args: argparse.Namespace):
 
@@ -92,25 +98,37 @@ def main(args: argparse.Namespace):
 
     r = 0
     while r < 100000:
-        #Generate random sample
         sublists = get_random_sample(freqs, 4)
-        shaft_pcts = {}
+        shaft_pcts = []
 
+        #create a shaft counter
+        sc = 1
         for sub in sublists:
             pcts = []
             chars = ""
+            temp_shaft_list = {} 
+
 
             for char,_,pct in sub:
                 pcts.append(pct)
                 chars += char
 
-            #Final average for shaft
-            shaft_pcts["".join(sorted(chars))] = get_average(pcts)
-            #print(shaft_pcts)
+            temp_shaft_list["shaft"] = sc
+            temp_shaft_list["chars"] = "".join(sorted(chars))
+            temp_shaft_list["freq"] = get_average(pcts)
+
+            shaft_pcts.append(temp_shaft_list) #add shaft list to shaft dictionary
+            
+            sc += 1 #increase shaft counter
+
+            temp = [] #create a list to hold the frequenices of the shaft
+            for i in shaft_pcts:
+                temp.append(i["freq"])
         
-            shaft_max = max(list(shaft_pcts.values()))
-            shaft_min = min(list(shaft_pcts.values()))
-            delta = shaft_max- shaft_min
+        #Final average for shaft
+        shaft_max = max(temp) #calculate max frequency
+        shaft_min = min(temp) #calculate min frequency
+        delta = shaft_max - shaft_min #calculate the difference
 
         
         if delta <= 0.001:
