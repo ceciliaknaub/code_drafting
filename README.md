@@ -1,1 +1,1 @@
-A python script to generate balanced draft codings for a corpus.
+A python script to generate balanced weaving draft codings for a corpus.
